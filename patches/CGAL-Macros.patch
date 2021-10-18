@@ -1,0 +1,11 @@
+--- CGAL-5.2/cmake/modules/CGAL_Macros.cmake	2021-10-17 20:50:12.000000000 -0400
++++ CGAL-5.2-fix/cmake/modules/CGAL_Macros.cmake	2021-10-17 20:48:50.000000000 -0400
+@@ -379,7 +379,7 @@
+       # Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+       set(CGAL_CMAKE_MODULE_PATH ${CGAL_MODULES_DIR})
+ 
+-      set(ORIGINAL_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
++      set(ORIGINAL_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
+ 
+       set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CGAL_CMAKE_MODULE_PATH})
+ 

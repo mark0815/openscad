@@ -150,30 +150,6 @@ macro(find_graphics)
   endif()
 endmacro(find_graphics)
 
-# NOTE FindCGAL.cmake resets the BOOST_* and Boost_* variables,
-#   because it looks for Boost itself, so it has to be called
-#   before we look for our own required boost libraries.
-set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
-find_package(CGAL REQUIRED COMPONENTS Core)
-message(STATUS "CGAL: ${CGAL_MAJOR_VERSION}.${CGAL_MINOR_VERSION}")
-add_definitions(-DENABLE_CGAL)
-# The macro `CGAL_DEBUG` allows to force CGAL assertions, even if `NDEBUG` is defined,
-# Enabling CGAL assertions is necessary for us to catch them before they cause a crash
-# on bad geometry input.
-add_definitions(-DCGAL_DEBUG)
-if(TARGET CGAL::CGAL)
-  list(APPEND COMMON_LIBRARIES CGAL::CGAL CGAL::CGAL_Core)
-  message(STATUS "CGAL: Using target CGAL::CGAL CGAL::CGAL_Core")
-else()
-  list(APPEND COMMON_LIBRARIES ${CGAL_LIBRARY})
-  list(APPEND COMMON_LIBRARIES ${GMP_LIBRARIES})
-  list(APPEND COMMON_LIBRARIES ${MPFR_LIBRARIES})
-endif()
-# revert any changes to module path from CGAL_Macros.cmake
-if (CGAL_MODULE_PATH_IS_SET)
-  set(CMAKE_MODULE_PATH ORIGINAL_CMAKE_MODULE_PATH)
-endif()
-
 if (MSVC)
   # Flex lexer options
   set(WINCOMPAT "--wincompat --nounistd")
@@ -258,6 +234,23 @@ else()
   list(APPEND COMMON_LIBRARIES ${DoubleConversion_LIBRARIES})
 
   find_graphics()
+endif()
+
+set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
+find_package(CGAL REQUIRED COMPONENTS Core)
+message(STATUS "CGAL: ${CGAL_MAJOR_VERSION}.${CGAL_MINOR_VERSION}")
+add_definitions(-DENABLE_CGAL)
+if(TARGET CGAL::CGAL)
+  list(APPEND COMMON_LIBRARIES CGAL::CGAL CGAL::CGAL_Core)
+  message(STATUS "CGAL: Using target CGAL::CGAL CGAL::CGAL_Core")
+else()
+  list(APPEND COMMON_LIBRARIES ${CGAL_LIBRARY})
+  list(APPEND COMMON_LIBRARIES ${GMP_LIBRARIES})
+  list(APPEND COMMON_LIBRARIES ${MPFR_LIBRARIES})
+endif()
+# revert any changes to module path from CGAL_Macros.cmake
+if (CGAL_MODULE_PATH_IS_SET)
+  set(CMAKE_MODULE_PATH ${ORIGINAL_CMAKE_MODULE_PATH})
 endif()
 
 find_package(LibZip REQUIRED QUIET)
