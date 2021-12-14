@@ -472,7 +472,7 @@ build_libxml2()
   ./configure CC="cc -target $ARCHS_COMBINED-apple-macos13.0" --prefix="$DEPLOYDIR" --with-zlib=/usr --without-lzma --without-ftp --without-http --without-python
   make -j$NUMCPU
   make install
-  install_name_tool -id @rpath/libxml2.dylib $aDEPLOYDIR/lib/libxml2.dylib
+  install_name_tool -id @rpath/libxml2.dylib $DEPLOYDIR/lib/libxml2.dylib
   echo $version > $DEPLOYDIR/share/macosx-build-dependencies/libxml2.version
 }
 
